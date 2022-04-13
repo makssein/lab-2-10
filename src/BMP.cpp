@@ -1,6 +1,7 @@
 #include <BMP.hpp>
 
-namespace mt::images{
+namespace my::images{
+    //#define MY_DEBUG_STEPS
 
     BMP::BMP(){
         m_width = 0;
@@ -180,25 +181,40 @@ namespace mt::images{
                           {(double)(m_width / 2)},
                           {(double)(m_height / 2)}
                   } });
-
-        for(int i=0;i<m_height;i++)
-            for (int j = 0; j < m_width; j++)
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 1 done" << std::endl;
+#endif
+        for(int i = 0; i < m_height; i++)
+            for (int j = 0; j < m_width; j++){
                 m_coordinates[i][j] = m_coordinates[i][j] - T;
-
+            }
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 2 done" << std::endl;
+#endif
         Mat22d R({ {
                            {cos(angle), sin(angle)},
                            {-sin(angle), cos(angle)}
                    } });
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 3 done" << std::endl;
+#endif
         for (int i = 0; i < m_height; i++)
             for (int j = 0; j < m_width; j++){
                 m_coordinates[i][j] = R * m_coordinates[i][j];
+                //std::cout << m_coordinates[i][j] << std::endl;
             }
+        std::cout << m_coordinates[150][150] << std::endl;
 
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 4 done" << std::endl;
+#endif
         int maxX = INT_MIN;
         int minX = INT_MAX;
         int maxY = INT_MIN;
         int minY = INT_MAX;
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 5 done" << std::endl;
+#endif
         for (int i = 0; i < m_height; i++)
             for (int j = 0; j < m_width; j++){
                 if (maxX < m_coordinates[i][j].get(0, 0))
@@ -210,7 +226,9 @@ namespace mt::images{
                 if (minY > m_coordinates[i][j].get(1, 0))
                     minY = m_coordinates[i][j].get(1, 0);
             }
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 6 done" << std::endl;
+#endif
         maxX++;
         minX--;
         maxY++;
@@ -218,54 +236,84 @@ namespace mt::images{
 
         int width = maxX - minX;
         int height = maxY - minY;
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 7 done" << std::endl;
+#endif
         Vec2d shift({ {
                               {(double)(width/2)},
                               {(double)(height/2)}
                       } });
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 8 done" << std::endl;
+#endif
+        //std::cerr << shift << std::endl;
+        //std::cerr << m_coordinates[145][144] << std::endl;
 
         for (int i = 0; i < m_height; i++)
-            for (int j = 0; j < m_width; j++)
+            for (int j = 0; j < m_width; j++) {
                 m_coordinates[i][j] = m_coordinates[i][j] + shift;
-
+                //std::cerr << i << "=" << j << "=" << m_coordinates[i][j] << std::endl;
+            }
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 9 done" << std::endl;
+#endif
         Pixel** new_pixels = new Pixel * [height];
         for (int i = 0; i < height; i++)
             new_pixels[i] = new Pixel[width];
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 10 done" << std::endl;
+#endif
         Vec2d** new_coordinates = new Vec2d * [height];
         for (int i = 0; i < height; i++)
             new_coordinates[i] = new Vec2d[width];
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 11 done" << std::endl;
+#endif
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
                 new_pixels[i][j] = { 0,0,0 };
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 12 done" << std::endl;
+#endif
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++){
                 new_coordinates[i][j].set(0, 0, j);
                 new_coordinates[i][j].set(0, 0, i);
             }
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 13 done" << std::endl;
+#endif
         for (int i = 0; i < m_height; i++)
             for (int j = 0; j < m_width; j++){
                 int x = (int)(m_coordinates[i][j].get(0, 0));
                 int y = (int)(m_coordinates[i][j].get(1, 0));
                 new_pixels[y][x] = m_pixels[i][j];
             }
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 14 done" << std::endl;
+#endif
         for (int i = 0; i < m_height; i++)
             delete[] m_pixels[i];
         delete[] m_pixels;
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 15 done" << std::endl;
+#endif
         for (int i = 0; i < m_height; i++)
             delete[] m_coordinates[i];
         delete[] m_coordinates;
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 16 done" << std::endl;
+#endif
         m_pixels = new_pixels;
         m_coordinates = new_coordinates;
-
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 17 done" << std::endl;
+#endif
         m_width = width;
         m_height = height;
+#ifdef MY_DEBUG_STEPS
+        std::cerr << "step 18 done" << std::endl;
+#endif
     }
 
 }

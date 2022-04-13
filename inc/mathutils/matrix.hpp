@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-namespace mt::math{
+namespace my::math{
     // MY_DEBUG
     //#define MY_DEBUG
 
@@ -105,17 +105,15 @@ namespace mt::math{
         }
 
         template<typename A, int B, int C>
-        Matrix<T, N, M> operator*(const Matrix<A, B, C>& mat){
+        Matrix<T, N, C> operator*(const Matrix<A, B, C>& mat){
 #ifdef MY_DEBUG
             std::cout << "operator*" << std::endl;
 #endif
-            Matrix<T, N, M> tmp;
-
-            for (int i = 0; i < m_n; i++)
-                for (int j = 0; j < mat.getM(); j++)
-                {
+            Matrix<T, N, C> tmp;
+            for (int i = 0; i < mat.getM(); i++)
+                for (int j = 0; j < mat.getM(); j++){
                     T sum = 0;
-                    for (int k = 0; k < m_m; k++)
+                    for (int k = 0; k < m_n; k++)
                         sum += m_mat[i][k] * mat.get(k, j);
                     tmp.set(i, j, sum);
                 }

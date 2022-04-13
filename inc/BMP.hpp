@@ -4,10 +4,10 @@
 #include <mathutils/matrix.hpp>
 #include <math.h>
 
-using mt::math::Vec2d;
-using mt::math::Mat22d;
+using my::math::Vec2d;
+using my::math::Mat22d;
 
-namespace mt::images{
+namespace my::images{
 
 #pragma pack(1)
     struct Pixel{

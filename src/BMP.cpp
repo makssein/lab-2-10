@@ -320,14 +320,14 @@ namespace my::images{
             for (int j = 1; j < m_width-1; j++){
                 if (m_pixels[i][j].r == 0 && m_pixels[i][j].g == 0 && m_pixels[i][j].b == 0){
                     count = 8;
-                    if ((m_pixels[i + 1][j].r && m_pixels[i + 1][j].b && m_pixels[i + 1][j].g) == 0) count = count - 1;
-                    if ((m_pixels[i + 1][j+1].r && m_pixels[i + 1][j+1].b && m_pixels[i + 1][j+1].g) == 0) count = count - 1;
-                    if ((m_pixels[i][j+1].r && m_pixels[i][j+1].b && m_pixels[i][j+1].g) == 0) count = count - 1;
-                    if ((m_pixels[i - 1][j].r && m_pixels[i - 1][j].b && m_pixels[i - 1][j].g) == 0) count = count - 1;
-                    if ((m_pixels[i - 1][j-1].r && m_pixels[i - 1][j-1].b && m_pixels[i - 1][j-1].g) == 0) count = count - 1;
-                    if ((m_pixels[i][j-1].r && m_pixels[i][j-1].b && m_pixels[i][j-1].g) == 0) count = count - 1;
-                    if ((m_pixels[i + 1][j-1].r && m_pixels[i + 1][j-1].b && m_pixels[i + 1][j-1].g) == 0) count = count - 1;
-                    if ((m_pixels[i - 1][j+1].r && m_pixels[i - 1][j+1].b && m_pixels[i - 1][j+1].g) == 0) count = count - 1;
+                    if ((m_pixels[i + 1][j].r && m_pixels[i + 1][j].b && m_pixels[i + 1][j].g) == 0) count--;
+                    if ((m_pixels[i + 1][j+1].r && m_pixels[i + 1][j+1].b && m_pixels[i + 1][j+1].g) == 0) count--;
+                    if ((m_pixels[i][j+1].r && m_pixels[i][j+1].b && m_pixels[i][j+1].g) == 0) count--;
+                    if ((m_pixels[i - 1][j].r && m_pixels[i - 1][j].b && m_pixels[i - 1][j].g) == 0) count--;
+                    if ((m_pixels[i - 1][j-1].r && m_pixels[i - 1][j-1].b && m_pixels[i - 1][j-1].g) == 0) count--;
+                    if ((m_pixels[i][j-1].r && m_pixels[i][j-1].b && m_pixels[i][j-1].g) == 0) count--;
+                    if ((m_pixels[i + 1][j-1].r && m_pixels[i + 1][j-1].b && m_pixels[i + 1][j-1].g) == 0) count--;
+                    if ((m_pixels[i - 1][j+1].r && m_pixels[i - 1][j+1].b && m_pixels[i - 1][j+1].g) == 0) count--;
 
 
                     m_pixels[i][j].r = (m_pixels[i + 1][j].r + m_pixels[i][j + 1].r + m_pixels[i - 1][j].r + m_pixels[i][j - 1].r + m_pixels[i + 1][j + 1].r + m_pixels[i - 1][j - 1].r + m_pixels[i + 1][j - 1].r + m_pixels[i - 1][j + 1].r) / count;

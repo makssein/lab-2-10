@@ -201,13 +201,12 @@ namespace my::images{
         for (int i = 0; i < m_height; i++)
             for (int j = 0; j < m_width; j++){
                 m_coordinates[i][j] = R * m_coordinates[i][j];
-                //std::cout << m_coordinates[i][j] << std::endl;
             }
-        std::cout << m_coordinates[150][150] << std::endl;
 
 #ifdef MY_DEBUG_STEPS
         std::cerr << "step 4 done" << std::endl;
 #endif
+
         int maxX = INT_MIN;
         int minX = INT_MAX;
         int maxY = INT_MIN;
@@ -215,8 +214,8 @@ namespace my::images{
 #ifdef MY_DEBUG_STEPS
         std::cerr << "step 5 done" << std::endl;
 #endif
-        for (int i = 0; i < m_height; i++)
-            for (int j = 0; j < m_width; j++){
+        for (int i = 0; i < m_height; i++) {
+            for (int j = 0; j < m_width; j++) {
                 if (maxX < m_coordinates[i][j].get(0, 0))
                     maxX = m_coordinates[i][j].get(0, 0);
                 if (minX > m_coordinates[i][j].get(0, 0))
@@ -226,6 +225,7 @@ namespace my::images{
                 if (minY > m_coordinates[i][j].get(1, 0))
                     minY = m_coordinates[i][j].get(1, 0);
             }
+        }
 #ifdef MY_DEBUG_STEPS
         std::cerr << "step 6 done" << std::endl;
 #endif
@@ -236,23 +236,21 @@ namespace my::images{
 
         int width = maxX - minX;
         int height = maxY - minY;
+
 #ifdef MY_DEBUG_STEPS
         std::cerr << "step 7 done" << std::endl;
 #endif
         Vec2d shift({ {
-                              {(double)(width/2)},
-                              {(double)(height/2)}
+                              {(double)(width / 2)},
+                              {(double)(height / 2)}
                       } });
 #ifdef MY_DEBUG_STEPS
         std::cerr << "step 8 done" << std::endl;
 #endif
-        //std::cerr << shift << std::endl;
-        //std::cerr << m_coordinates[145][144] << std::endl;
 
         for (int i = 0; i < m_height; i++)
             for (int j = 0; j < m_width; j++) {
                 m_coordinates[i][j] = m_coordinates[i][j] + shift;
-                //std::cerr << i << "=" << j << "=" << m_coordinates[i][j] << std::endl;
             }
 #ifdef MY_DEBUG_STEPS
         std::cerr << "step 9 done" << std::endl;
@@ -316,5 +314,28 @@ namespace my::images{
 #endif
     }
 
+    void BMP::interpolation() {
+        int count;
+        for (int i = 1; i < m_height-1; i++)
+            for (int j = 1; j < m_width-1; j++){
+                if (m_pixels[i][j].r == 0 && m_pixels[i][j].g == 0 && m_pixels[i][j].b == 0){
+                    count = 8;
+                    if ((m_pixels[i + 1][j].r && m_pixels[i + 1][j].b && m_pixels[i + 1][j].g) == 0) count = count - 1;
+                    if ((m_pixels[i + 1][j+1].r && m_pixels[i + 1][j+1].b && m_pixels[i + 1][j+1].g) == 0) count = count - 1;
+                    if ((m_pixels[i][j+1].r && m_pixels[i][j+1].b && m_pixels[i][j+1].g) == 0) count = count - 1;
+                    if ((m_pixels[i - 1][j].r && m_pixels[i - 1][j].b && m_pixels[i - 1][j].g) == 0) count = count - 1;
+                    if ((m_pixels[i - 1][j-1].r && m_pixels[i - 1][j-1].b && m_pixels[i - 1][j-1].g) == 0) count = count - 1;
+                    if ((m_pixels[i][j-1].r && m_pixels[i][j-1].b && m_pixels[i][j-1].g) == 0) count = count - 1;
+                    if ((m_pixels[i + 1][j-1].r && m_pixels[i + 1][j-1].b && m_pixels[i + 1][j-1].g) == 0) count = count - 1;
+                    if ((m_pixels[i - 1][j+1].r && m_pixels[i - 1][j+1].b && m_pixels[i - 1][j+1].g) == 0) count = count - 1;
+
+
+                    m_pixels[i][j].r = (m_pixels[i + 1][j].r + m_pixels[i][j + 1].r + m_pixels[i - 1][j].r + m_pixels[i][j - 1].r + m_pixels[i + 1][j + 1].r + m_pixels[i - 1][j - 1].r + m_pixels[i + 1][j - 1].r + m_pixels[i - 1][j + 1].r) / count;
+                    m_pixels[i][j].b = (m_pixels[i + 1][j].b + m_pixels[i][j + 1].b + m_pixels[i - 1][j].b + m_pixels[i][j - 1].b + m_pixels[i + 1][j + 1].b + m_pixels[i - 1][j - 1].b + m_pixels[i + 1][j - 1].b + m_pixels[i - 1][j + 1].b) / count;
+                    m_pixels[i][j].g = (m_pixels[i + 1][j].g + m_pixels[i][j + 1].g + m_pixels[i - 1][j].g + m_pixels[i][j - 1].g + m_pixels[i + 1][j + 1].g + m_pixels[i - 1][j - 1].g + m_pixels[i + 1][j - 1].g + m_pixels[i - 1][j + 1].g) / count;
+
+                }
+            }
+    }
 }
 

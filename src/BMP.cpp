@@ -314,7 +314,7 @@ namespace my::images{
 #endif
     }
 
-    void BMP::interpolation() {
+    void BMP::Interpolation() {
         int count;
         for (int i = 1; i < m_height-1; i++)
             for (int j = 1; j < m_width-1; j++){

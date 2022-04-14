@@ -29,7 +29,7 @@ namespace my::images{
         void Open(const std::string& filename);
         void Save(const std::string& filename);
         void Rotate(double angle);
-        void interpolation();
+        void Interpolation();
 
     private:
         int m_width, m_height;
